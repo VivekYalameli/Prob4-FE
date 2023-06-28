@@ -1,62 +1,60 @@
 import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import ButtonAppBar from './Home';
-import { Button, Typography } from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import { Navigate } from 'react-router-dom';
+import { Typography } from '@mui/material';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 // {
 //     "serverName": "Order Service",
 //     "serverstatus": 200,
 //     "appUrl": "http://localhost:9998/order/placeOrder"
 // }
-const columns = [
-    {field: 'id', headerName: 'ID', width: 50},
-  { field: 'serverName', headerName: 'Server Name', width: 130 },
-  { field: 'serverstatus', headerName: 'Server Status', width: 130 },
-  { field: 'appUrl', headerName: 'Application URL', width: 300 },
-  {
-    field: 'action',
-    headerName: 'Action',
-    type: <button />,
-    renderCell: (params) => {
-        // you will find row info in params
-        <button>Action</button>
-     },
-    width: 90,
-  },
+// const columns = [
+//     {field: 'id', headerName: 'ID', width: 50},
+//   { field: 'serverName', headerName: 'Server Name', width: 130 },
+//   { field: 'serverstatus', headerName: 'Server Status', width: 130 },
+//   { field: 'appUrl', headerName: 'Application URL', width: 300 },
 //   {
-//     field: 'fullName',
-//     headerName: 'Full name',
-//     description: 'This column has a value getter and is not sortable.',
-//     sortable: false,
-//     width: 160,
-//     valueGetter: (params) =>
-//       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+//     field: 'action',
+//     headerName: 'Action',
+//     type: 'button',
+//     renderCell: (params) => {
+//         // you will find row info in params
+//         <button>Action</button>
+//      },
+//     width: 90,
 //   },
-];
+// //   {
+// //     field: 'fullName',
+// //     headerName: 'Full name',
+// //     description: 'This column has a value getter and is not sortable.',
+// //     sortable: false,
+// //     width: 160,
+// //     valueGetter: (params) =>
+// //       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+// //   },
+// ];
 const data = [{
     id: 1,
     serverName: "Order Service",
-    serverstatus: 200,
+    serverstatus: 201,
     appUrl: "http://localhost:9998/order/placeOrder",
     action: ""
 },
 {
     id: 2,
     serverName: "Order Service",
-    serverstatus: 200,
+    serverstatus: 401,
     appUrl: "http://localhost:9998/order/placeOrder",
     action: ""
 },{
     id: 3,
     serverName: "Order Service",
     serverstatus: 200,
-    appUrl: "http://localhost:9998/order/placeOrder",
+    appUrl: "http://localhost:9998/order/service",
     action: "running"
 }]
-const rows = data
+const tableData = data
 //   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
   
 //   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
@@ -80,7 +78,16 @@ export default function DataTable() {
         fetchData()
     },[])
     console.log(healthData)
-
+    const handleClick=(appUrl)=>{
+        axios
+      .post("https://jsonplaceholder.typicode.com/posts", {
+        appUrl: appUrl,
+      })
+      .then((response) => {
+        // setPost(response.data);
+      });
+        
+    }
   return (
     <>
     <ButtonAppBar/>
@@ -90,7 +97,7 @@ export default function DataTable() {
             {/* <DashboardIcon/> */}
             DashBoard
         </Typography>
-      <DataGrid
+      {/* <DataGrid
         rows={rows}
         columns={columns}
         initialState={{
@@ -100,7 +107,33 @@ export default function DataTable() {
         }}
         pageSizeOptions={[5, 10]}
         checkboxSelection
-      />
+      /> */}
+      <TableContainer>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Serial No</TableCell>
+            <TableCell>Server Name</TableCell>
+            <TableCell>Server Status</TableCell>
+            <TableCell>Application URL</TableCell>
+            <TableCell>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {tableData.map((row) => (
+            <TableRow key={row.id}>
+              <TableCell>{row.id}</TableCell>
+              <TableCell>{row.serverName}</TableCell>
+              <TableCell>{row.serverstatus}</TableCell>
+              <TableCell>{row.appUrl}</TableCell>
+              <TableCell>
+                <Button variant="contained" disabled={(row.serverstatus === 201?true:false) || (row.serverstatus === 200?true:false)} onClick={() => handleClick(row.appUrl)}>Click me</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
     </div>
     </>
   );

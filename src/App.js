@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import SignIn from "./Components/Login";
 import DashboardEnhancedTable from "./Components/Dashboard";

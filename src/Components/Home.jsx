@@ -5,14 +5,10 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 
 import Toolbar from "@mui/material/Toolbar";
-
+import LoginIcon from '@mui/icons-material/Login';
 import Typography from "@mui/material/Typography";
-
-import Button from "@mui/material/Button";
-
 import IconButton from "@mui/material/IconButton";
-
-import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from '@mui/icons-material/Home';
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -29,13 +25,13 @@ export default function ButtonAppBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            <HomeIcon onClick={()=>{navigate('/dashboard')}} />
           </IconButton>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Health Check Monitoring Application
           </Typography>
-
+          <LoginIcon onClick={()=>{navigate('/')}} />
           <Tooltip title="Create User">
             <IconButton onClick={()=>{navigate('/user')}}>
               <GroupAddIcon color="white" fontSize="medium"/>

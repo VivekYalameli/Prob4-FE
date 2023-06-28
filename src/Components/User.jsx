@@ -1,23 +1,45 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import ButtonAppBar from "./Home";
+import { useNavigate } from "react-router-dom";
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export default function SignUp() {
+    const navigate = useNavigate()
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      username: data.get("username"),
-      password: data.get("password"),
-    });
+    // console.log({
+    //   email: data.get("email"),
+    //   username: data.get("username"),
+    //   password: data.get("password"),
+    // });
+    
+    fetch("https://jsonplaceholder.typicode.com/posts", {
+      method: "POST",
+      body: JSON.stringify({
+        email: data.get("email"),
+        username: data.get("userName"),
+        password: data.get("password"),
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => {
+        console.log(response.status)
+        if(response.status === 201) {
+          navigate('/dashboard')
+        }
+        else{
+          alert("Incorrect Password or Username")
+        }
+        response.json()
+      })
+      .then((json) => console.log(json));
   };
   const loginHandler = ()=>{
 
@@ -35,9 +57,12 @@ export default function SignUp() {
           alignItems: "center",
         }}
       >
+        
         <Typography component="h1" variant="h5">
-          Sign in
+        {/* <ArrowBackIcon style={{align: "left"}} onClick={()=>{navigate(-1)}}/> */}
+          Sign Up
         </Typography>
+        
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -69,7 +94,7 @@ export default function SignUp() {
             id="password"
             autoComplete="current-password"
           />
-          <TextField
+          {/* <TextField
             margin="normal"
             required
             fullWidth
@@ -78,7 +103,7 @@ export default function SignUp() {
             type="password"
             id="password"
             autoComplete="current-password"
-          />
+          /> */}
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
