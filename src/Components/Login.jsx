@@ -18,10 +18,10 @@ export default function SignIn() {
     //   email: data.get("email"),
     //   password: data.get("password"),
     // });
-    fetch("https://jsonplaceholder.typicode.com/posts", {
+    fetch("http://localhost:8897/user/login", {
       method: "POST",
       body: JSON.stringify({
-        email: data.get("email"),
+        username: data.get("email"),
         password: data.get("password"),
       }),
       headers: {
@@ -30,7 +30,7 @@ export default function SignIn() {
     })
       .then((response) => {
         console.log(response.status)
-        if(response.status === 201) {
+        if(response.status === 200) {
           navigate('/dashboard')
         }
         else{

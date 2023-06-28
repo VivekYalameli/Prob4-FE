@@ -34,27 +34,27 @@ import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRo
 // //       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
 // //   },
 // ];
-const data = [{
-    id: 1,
-    serverName: "Order Service",
-    serverstatus: 201,
-    appUrl: "http://localhost:9998/order/placeOrder",
-    action: ""
-},
-{
-    id: 2,
-    serverName: "Order Service",
-    serverstatus: 401,
-    appUrl: "http://localhost:9998/order/placeOrder",
-    action: ""
-},{
-    id: 3,
-    serverName: "Order Service",
-    serverstatus: 200,
-    appUrl: "http://localhost:9998/order/service",
-    action: "running"
-}]
-const tableData = data
+// const data = [{
+//     id: 1,
+//     serverName: "Order Service",
+//     serverstatus: 201,
+//     appUrl: "http://localhost:9998/order/placeOrder",
+//     action: ""
+// },
+// {
+//     id: 2,
+//     serverName: "Order Service",
+//     serverstatus: 401,
+//     appUrl: "http://localhost:9998/order/placeOrder",
+//     action: ""
+// },{
+//     id: 3,
+//     serverName: "Order Service",
+//     serverstatus: 200,
+//     appUrl: "http://localhost:9998/order/service",
+//     action: "running"
+// }]
+//const tableData = data
 //   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
   
 //   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
@@ -70,7 +70,7 @@ const tableData = data
 export default function DataTable() {
     const [healthData, setHealthData]=useState([])
     const fetchData = async()=>{
-        const response = await axios.get("https://jsonplaceholder.typicode.com/users")
+        const response = await axios.get("http://localhost:8890/api/getHealthStatus")
         setHealthData(response.data)
         
     }
@@ -78,10 +78,11 @@ export default function DataTable() {
         fetchData()
     },[])
     console.log(healthData)
-    const handleClick=(appUrl)=>{
+    const handleClick=(appUrl, serviceName)=>{
         axios
-      .post("https://jsonplaceholder.typicode.com/posts", {
-        appUrl: appUrl,
+      .post("http://localhost:8890/api/mail", {
+        serviceName: serviceName,
+        url: appUrl
       })
       .then((response) => {
         // setPost(response.data);
@@ -112,22 +113,22 @@ export default function DataTable() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Serial No</TableCell>
-            <TableCell>Server Name</TableCell>
-            <TableCell>Server Status</TableCell>
-            <TableCell>Application URL</TableCell>
-            <TableCell>Action</TableCell>
+           
+            <TableCell><span style={{fontWeight: 'bold'}}>Server Names</span></TableCell>
+            <TableCell><span style={{fontWeight: 'bold'}}>Server Status</span></TableCell>
+            <TableCell><span style={{fontWeight: 'bold'}}>Application URL</span></TableCell>
+            <TableCell><span style={{fontWeight: 'bold'}}>Action</span></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {tableData.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.id}</TableCell>
+          {healthData.map((row) => (
+            <TableRow key={Math.random()}>
+            
               <TableCell>{row.serverName}</TableCell>
-              <TableCell>{row.serverstatus}</TableCell>
-              <TableCell>{row.appUrl}</TableCell>
+              <TableCell>{row.status===200?"Running":"Down"}</TableCell>
+              <TableCell>{row.applicationUrl}</TableCell>
               <TableCell>
-                <Button variant="contained" disabled={(row.serverstatus === 201?true:false) || (row.serverstatus === 200?true:false)} onClick={() => handleClick(row.appUrl)}>Click me</Button>
+                <Button variant="contained" disabled={(row.status === 201?true:false) || (row.status === 200?true:false)} onClick={() => handleClick(row.applicationUrl,row.serverName)}>mail</Button>
               </TableCell>
             </TableRow>
           ))}
